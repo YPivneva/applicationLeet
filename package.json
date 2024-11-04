@@ -1,0 +1,12 @@
+{
+  "name": "applicationleet",
+  "version": "1.0.0",
+  "description": "an application that stores various programming tasks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "YPivneva",
+  "license": "ISC"
+}
