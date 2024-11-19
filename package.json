@@ -4,9 +4,21 @@
   "description": "an application that stores various programming tasks",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "YPivneva",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.1",
+    "express-basic-auth": "^1.2.1",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.8.0",
+    "typeor": "^1.2.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
 }
