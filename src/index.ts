@@ -1,9 +1,24 @@
-const userInfo: [string, number] = ['John', 26];
+import express, { Express } from "express";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import userRoutes from "./routes/users";
+import taskRoutes from "./routes/tasks";
 
-type Info = [string, number];
+const app: Express = express();
+const PORT: number = Number(process.env.PORT) || 3000;
 
-const showInfo = (info: Info) => {
-    console.log(`Пользователь ${info[0]} имеет возраст ${info[1]} лет`);
-}
+// Подключение к MongoDB
+mongoose.connect("mongodb://localhost:27017/task-manager", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-showInfo(userInfo);
+// Middleware
+app.use(bodyParser.json());
+app.use("/api/users", userRoutes);
+app.use("/api/tasks", taskRoutes);
+
+// Запуск сервера
+app.listen(PORT, (): void => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

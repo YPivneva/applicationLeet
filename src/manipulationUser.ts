@@ -1,8 +1,8 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const session = require("express-session");
-const basicAuth = require("express-basic-auth");
+import express, { Request, Response } from "express";
+import bodyParser from "body-parser";
+import mongoose, { Document, Schema } from "mongoose";
+import session from "express-session";
+import basicAuth from "express-basic-auth";
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,7 +19,21 @@ mongoose.connect("mongodb://localhost:27017/leetcode_clone", {
   useUnifiedTopology: true,
 });
 
-const taskSchema = new mongoose.Schema({
+interface Example {
+  input: string;
+  output: string;
+}
+
+interface TaskDocument extends Document {
+  title: string;
+  description: string;
+  examples: Example[];
+  difficulty: string;
+  tags: string[];
+  additionalMaterials: string[];
+}
+
+const taskSchema: Schema = new Schema({
   title: String,
   description: String,
   examples: [{ input: String, output: String }],
@@ -28,7 +42,14 @@ const taskSchema = new mongoose.Schema({
   additionalMaterials: [String],
 });
 
-const userSchema = new mongoose.Schema({
+interface UserDocument extends Document {
+  username: string;
+  password: string;
+  role: "user" | "admin" | "interviewer";
+  rating: number;
+}
+
+const userSchema: Schema = new Schema({
   username: String,
   password: String,
   role: {
@@ -39,10 +60,12 @@ const userSchema = new mongoose.Schema({
   rating: Number,
 });
 
-const Task = mongoose.model("Task", taskSchema);
-const User = mongoose.model("User", userSchema);
+const Task = mongoose.model<TaskDocument>("Task", taskSchema);
+const User = mongoose.model<UserDocument>("User", userSchema);
 
-const users = [{ name: "admin", pwd: "supersecret" }];
+const users: { name: string; pwd: string }[] = [
+  { name: "admin", pwd: "supersecret" },
+];
 
 app.use(
   basicAuth({
@@ -52,8 +75,9 @@ app.use(
   }),
 );
 
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
+app.post("/login", (req: Request, res: Response): void => {
+  const { username, password }: { username: string; password: string } =
+    req.body;
 
   if (users.some((x) => x.name === username && x.pwd === password)) {
     return res.status(200).send("Login successful");
@@ -62,7 +86,7 @@ app.post("/login", (req, res) => {
   res.status(401).send("Authentication required.");
 });
 
-app.post("/logout", (req, res) => {
+app.post("/logout", (req: Request, res: Response): void => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).send("Could not log out.");
@@ -71,46 +95,40 @@ app.post("/logout", (req, res) => {
   });
 });
 
-// добавление задачи
-app.post("/tasks", (req, res) => {
-  const newTask = new Task(req.body);
+app.post("/tasks", (req: Request, res: Response): void => {
+  const newTask: TaskDocument = new Task(req.body);
   newTask
     .save()
     .then((task) => res.status(201).json(task))
     .catch((err) => res.status(400).json({ error: err.message }));
 });
 
-// получение задачи
-app.get("/tasks", (req, res) => {
+app.get("/tasks", (req: Request, res: Response): void => {
   Task.find()
     .then((tasks) => res.status(200).json(tasks))
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-// редактирование задачи
-app.put("/tasks/:id", (req, res) => {
+app.put("/tasks/:id", (req: Request, res: Response): void => {
   Task.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((task) => res.status(200).json(task))
     .catch((err) => res.status(400).json({ error: err.message }));
 });
 
-// удаление задачи
-app.delete("/tasks/:id", (req, res) => {
+app.delete("/tasks/:id", (req: Request, res: Response): void => {
   Task.findByIdAndDelete(req.params.id)
     .then(() => res.status(204).send())
     .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-// комментарий к задаче
-app.post("/tasks/:id/comments", (req, res) => {
+app.post("/tasks/:id/comments", (req: Request, res: Response): void => {
   // Логика добавления комментария
 });
 
-// оценка задачи
-app.post("/tasks/:id/rate", (req, res) => {
+app.post("/tasks/:id/rate", (req: Request, res: Response): void => {
   // Логика оценки задачи
 });
 
-app.listen(3000, () => {
+app.listen(3000, (): void => {
   console.log("Сервер запущен на порту 3000");
 });
