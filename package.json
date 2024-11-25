@@ -21,6 +21,7 @@
   "author": "YPivneva",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "express": "^4.21.1",
     "express-basic-auth": "^1.2.1",
@@ -31,6 +32,9 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.26.0",
     "@eslint/js": "^9.15.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.9.1",
     "eslint": "^9.15.0",
@@ -50,5 +54,21 @@
   "lint-staged": {
     "*.{js,ts,html,css}": "eslint --fix",
     "*.{js,ts,css,md,yml}": "prettier --write"
-  }
+  },
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./@types"
+    ]
+  },
+  "include": [
+    "src/*", 
+    "@types/*"
+  ]
 }
