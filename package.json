@@ -15,7 +15,11 @@
     "test": "tsc && jest --passWithNoTests --coverage",
     "lint": "prettier --check . && eslint . --ext .js,.ts",
     "lint:fix": "prettier --write . && eslint . --fix",
-    "build": "tsc"
+    "build": "tsc",
+    "typeorm": "tsx ./node.modules/typeorm/cli.js",
+    "typeorm:run": "npm run typeorm migration: run -- -d ./src/config/data-source.ts",
+    "typeorm:cli": "npm run typeorm migration: generation -- -d ./src/config/data-source.ts",
+    "start": "npx tsx ./src/index.ts"
   },
   "keywords": [],
   "author": "YPivneva",
@@ -44,10 +48,14 @@
     "eslint-plugin-jest": "^28.9.0",
     "eslint-plugin-prettier": "^5.2.1",
     "jest": "^29.7.0",
+    "pg": "^8.13.1",
     "prettier": "^3.3.3",
+    "reflect-metadata": "^0.2.2",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
+    "typeorm": "^0.3.20",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.15.0"
   },
@@ -68,7 +76,7 @@
     ]
   },
   "include": [
-    "src/*", 
+    "src/*",
     "@types/*"
   ]
 }
