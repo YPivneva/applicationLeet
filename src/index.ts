@@ -1,71 +1,22 @@
-import express, { Express } from "express";
+import express, { Express, Request, Response } from "express";
 // import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import session from "express-session";
+import path from "path";
+import { fileURLToPath } from "url";
 import userRoutes from "./routes/userRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
-import { Request, Response } from "express";
 import ds from "./config/data-source.js";
 import { Users } from "./db/entities/users.entity.js";
-import { Task } from "./db/entities/task.entity.js";
+// import { Task } from "./db/entities/task.entity.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app: Express = express();
-app.use(express.json());
-
-ds.initialize().then(()=>{
-  console.log('database is ready');
-});
-
-app.get("/users",async(req: Request, res: Response)=>{
-  const repo = ds.getRepository(Users);
-  const usersData = await repo.find();
-
-  res.send(usersData);
-});
-
-app.get("/users/:id",async(req: Request, res: Response)=>{
-  const repo = ds.getRepository(Users);
-  const id = parseInt(req.params.id);
-  const users = (await repo.findOneBy({id}));
-
-  res.send(users);
-});
-
-app.get("/task",async(req: Request, res: Response)=>{
-  const repo = ds.getRepository(Task);
-  const taskData = await repo.find();
-
-  res.send(taskData);
-});
-
-app.get("/task/:id",async(req: Request, res: Response)=>{
-  const repo = ds.getRepository(Task);
-  const id = parseInt(req.params.id);
-  const task = (await repo.findOneBy({id}));
-
-  res.send(task);
-});
-
-app.get("/task/byMask/:mask",async(req: Request, res: Response)=>{
-  const repo = ds.getRepository(Task);
-  const mask = req.params.mask;
-  const task = await repo.find({
-    where: {title: mask},
-  });
-  
-  res.send(task);
-});
-
-// Подключение к MongoDB
-// mongoose.connect("mongodb://localhost:27017/leetcode_clone")
-//   .then(() => {
-//     console.log("Успешно подключено к MongoDB");
-//   })
-//   .catch((err) => {
-//     console.error("Ошибка подключения к MongoDB:", err);
-//   });
 
 // Middleware
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(
   session({
@@ -74,8 +25,41 @@ app.use(
     saveUninitialized: true,
   }),
 );
+
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Initialize database
+ds.initialize()
+  .then(() => {
+    console.log("Database is ready");
+  })
+  .catch((err) => {
+    console.error("Error initializing database:", err);
+  });
+
+// API Routes
 app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
+
+// Direct database routes with error handling
+app.get("/users", async (req: Request, res: Response) => {
+  try {
+    const repo = ds.getRepository(Users);
+    const usersData = await repo.find();
+    res.json(usersData);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Failed to fetch users" });
+  }
+});
+
+// Error handling middleware
+app.use((err: Error, req: Request, res: Response, _: any) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Something broke!" });
+});
 
 // Запуск сервера
 app.listen(3001, (): void => {

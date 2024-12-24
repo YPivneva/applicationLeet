@@ -31,6 +31,7 @@
     "express-basic-auth": "^1.2.1",
     "express-session": "^1.18.1",
     "mongoose": "^8.8.0",
+    "tsconfig-paths": "^4.2.0",
     "typeor": "^1.2.0"
   },
   "devDependencies": {

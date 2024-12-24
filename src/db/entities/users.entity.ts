@@ -1,21 +1,21 @@
-import {Column, Entity, ManyToOne, JoinTable, PrimaryColumn, JoinColumn} from "typeorm";
-import {Task} from "./task.entity.js";
+import {Column, Entity, ManyToOne, JoinTable, PrimaryColumn, JoinColumn, PrimaryGeneratedColumn} from "typeorm";
+// import {Task} from "./task.entity.js";
 
-@Entity('users')
+@Entity("users")
 export class Users{
-    @PrimaryColumn({type: "integer"})
-    userid: number;
+    @PrimaryGeneratedColumn()
+    userid!: number;
 
-    @Column({name: 'username', type: "string" })
-    username: string;
+    @Column({ name: "username", type: "varchar", unique: true })
+    username!: string;
 
-    @Column({name: 'passsword', type: "string" })
-    passsword: string;
+    // @Column({name: 'passsword', type: "varchar" })
+    // passsword!: string;
 
-    @Column({name: 'role', type: "string" })
-    role: string;
+    // @Column({name: 'role', type: "varchar", default: "user" })
+    // role!: string;
 
-    @ManyToOne(()=>Task, (task)=>task.users);
-    @JoinColumn()
-    task: userid;
+    // @ManyToOne(()=>Task, (task)=>task.users);
+    // @JoinColumn()
+    // task: userid;
 }
