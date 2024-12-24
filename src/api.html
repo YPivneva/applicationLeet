@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Документация API</title>
+    <style>
+      body {
+        width: 1200px;
+        margin: 0 auto;
+      }
+      h1,
+      h2 {
+        text-align: center;
+      }
+      .example-api {
+        font-style: italic;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Использование API на примере суммы двух чисел.</h1>
+    <h2>Эндпоинты API</h2>
+    <h3>POST /api/two-sum</h3>
+    <p>
+      Описание: Решает задачу "Two Sum", возвращая индексы двух чисел, которые в
+      сумме дают целевое значение.
+    </p>
+    <pre><code>    
+                Запрос:
+                    Тип: application/json
+                    Тело запроса:
+
+                    {
+                        "nums": [2, 7, 11, 15],
+                        "target": 9
+                    }
+
+                Ответ:
+                    Успех (200 OK):
+                        Тип: application/json
+                        Тело ответа:
+
+                        {
+                            "indices": [0, 1]
+                        }
+
+                    Ошибка (400 Bad Request):
+                        Тип: application/json
+                        Тело ответа:
+
+                        {
+                            "error": "Invalid input. Please provide an array of numbers and a target."
+                        }
+            </code></pre>
+    <h3>GET /api/two-sum/example</h3>
+    <pre><code>
+                Описание: Возвращает пример входных данных для задачи "Two Sum".
+                Запрос: Нет
+                Ответ:
+                    Успех (200 OK):
+                        Тип: application/json
+                        Тело ответа:
+
+                        {
+                            "example": {
+                                "nums": [2, 7, 11, 15],
+                                "target": 9
+                            }
+                        }
+            </code></pre>
+    <h2>Примеры использования</h2>
+    <p class="example-api">Пример 1: Решение задачи "Two Sum"</p>
+    <p>Запрос:</p>
+    <pre><code>
+                curl -X POST http://localhost:3000/api/two-sum \
+                -H "Content-Type: application/json" \
+                -d '{
+                    "nums": [2, 7, 11, 15],
+                    "target": 9
+                }'
+            </code></pre>
+    <p>Ответ:</p>
+    <pre><code>
+                {
+                    "indices": [0, 1]
+                }
+            </code></pre>
+    <p class="example-api">Пример 2: Ошибка при неверном вводе</p>
+    <p>Запрос:</p>
+    <pre><code>
+                curl -X POST http://localhost:3000/api/two-sum \
+                -H "Content-Type: application/json" \
+                -d '{
+                    "nums": "not an array",
+                    "target": 9
+                }'
+            </code></pre>
+    <p>Ответ:</p>
+    <pre><code>
+                {
+                    "error": "Invalid input. Please provide an array of numbers and a target."
+                }
+            </code></pre>
+    <p class="example-api">Пример 3: Получение примера входных данных</p>
+    <p>Запрос:</p>
+    <pre><code>
+                curl -X GET http://localhost:3000/api/two-sum/example
+            </code></pre>
+    <p>Ответ:</p>
+    <pre><code>
+                {
+                    "example": {
+                        "nums": [2, 7, 11, 15],
+                        "target": 9
+                    }
+                }
+            </code></pre>
+  </body>
+</html>
