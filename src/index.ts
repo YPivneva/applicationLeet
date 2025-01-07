@@ -8,7 +8,7 @@ import userRoutes from "./routes/userRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import ds from "./config/data-source.js";
 import { Users } from "./db/entities/users.entity.js";
-// import { Task } from "./db/entities/task.entity.js";
+import { Task } from "./db/entities/task.entity.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,7 +44,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/tasks", taskRoutes);
 
 // Direct database routes with error handling
-app.get("/users", async (req: Request, res: Response) => {
+app.get("/users", async (_: Request, res: Response) => {
   try {
     const repo = ds.getRepository(Users);
     const usersData = await repo.find();
@@ -52,6 +52,82 @@ app.get("/users", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ error: "Failed to fetch users" });
+  }
+});
+
+app.get("/users/:id", async (req: Request, res: Response) => {
+  try {
+    const id = req.params["id"] ? parseInt(req.params["id"]) : undefined;
+    if (!id) {
+      res.status(400).json({ error: "Invalid user ID" });
+      return;
+    }
+
+    const repo = ds.getRepository(Users);
+    const user = await repo.findOneBy({ userid: id });
+    
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    
+    res.json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ error: "Failed to fetch user" });
+  }
+});
+
+app.get("/task", async (_: Request, res: Response) => {
+  try {
+    const repo = ds.getRepository(Task);
+    const taskData = await repo.find();
+    res.json(taskData);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).json({ error: "Failed to fetch tasks" });
+  }
+});
+
+app.get("/task/:id", async (req: Request, res: Response) => {
+  try {
+    const id = req.params["id"] ? parseInt(req.params["id"]) : undefined;
+    if (!id) {
+      res.status(400).json({ error: "Invalid task ID" });
+      return;
+    }
+
+    const repo = ds.getRepository(Task);
+    const task = await repo.findOneBy({ id_list: id });
+    
+    if (!task) {
+      res.status(404).json({ error: "Task not found" });
+      return;
+    }
+    
+    res.json(task);
+  } catch (error) {
+    console.error("Error fetching task:", error);
+    res.status(500).json({ error: "Failed to fetch task" });
+  }
+});
+
+app.get("/task/byMask/:mask", async (req: Request, res: Response) => {
+  try {
+    const mask = req.params["mask"];
+    if (!mask) {
+      res.status(400).json({ error: "Invalid mask" });
+      return;
+    }
+
+    const repo = ds.getRepository(Task);
+    const tasks = await repo.find({
+      where: { title: mask },
+    });
+    res.json(tasks);
+  } catch (error) {
+    console.error("Error searching tasks:", error);
+    res.status(500).json({ error: "Failed to search tasks" });
   }
 });
 

@@ -9,11 +9,11 @@ export class Users{
     @Column({ name: "username", type: "varchar", unique: true })
     username!: string;
 
-    // @Column({name: 'passsword', type: "varchar" })
-    // passsword!: string;
+    @Column({name: 'passsword', type: "varchar" })
+    passsword!: string;
 
-    // @Column({name: 'role', type: "varchar", default: "user" })
-    // role!: string;
+    @Column({name: 'role', type: "varchar", default: "user" })
+    role!: string;
 
     // @ManyToOne(()=>Task, (task)=>task.users);
     // @JoinColumn()

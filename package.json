@@ -16,7 +16,7 @@
     "lint": "prettier --check . && eslint . --ext .js,.ts",
     "lint:fix": "prettier --write . && eslint . --fix",
     "build": "tsc",
-    "typeorm": "tsx ./node.modules/typeorm/cli.js",
+    "typeorm": "tsx ./node_modules/typeorm/cli.js",
     "typeorm:run": "npm run typeorm migration: run -- -d ./src/config/data-source.ts",
     "typeorm:cli": "npm run typeorm migration: generation -- -d ./src/config/data-source.ts",
     "start": "npx tsx ./src/index.ts"
