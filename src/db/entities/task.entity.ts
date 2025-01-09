@@ -19,8 +19,11 @@ export class Task{
     // updateat!: string;
 
     // @Column({type: "varchar" })
-    // bindTask: string;    
+    // bindTask: string;  
+    
+    // @Column({ userid: "userid", type: "number" })
+    // useid!: number;
 
-    @OneToMany(() => Users, (users) => users.task)
-    users!: Users[];
+    // @OneToMany(() => Users, (users) => users.task)
+    // users!: Users[];
 }

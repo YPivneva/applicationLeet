@@ -17,8 +17,8 @@
     "lint:fix": "prettier --write . && eslint . --fix",
     "build": "tsc",
     "typeorm": "tsx ./node_modules/typeorm/cli.js",
-    "typeorm:run": "npm run typeorm migration: run -- -d ./src/config/data-source.ts",
-    "typeorm:cli": "npm run typeorm migration: generation -- -d ./src/config/data-source.ts",
+    "typeorm:run": "typeorm migration:run myfirstMigration -d ./src/config/data-source.ts",
+    "typeorm:cli": "typeorm migration:generate myfirstMigration -d ./src/config/data-source.ts",
     "start": "npx tsx ./src/index.ts"
   },
   "keywords": [],
@@ -30,6 +30,7 @@
     "express": "^4.21.1",
     "express-basic-auth": "^1.2.1",
     "express-session": "^1.18.1",
+    "in-command": "^1.2.5",
     "mongoose": "^8.8.0",
     "tsconfig-paths": "^4.2.0",
     "typeor": "^1.2.0"

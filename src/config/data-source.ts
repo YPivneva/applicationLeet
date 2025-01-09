@@ -14,6 +14,7 @@ const AppDataSource = new DataSource({
     logging: true,
 
     entities: [Users, Task],
+    migrationsTableName: "__migrations",
     migrations: ["./src/db/migrations/*.ts"],
     subscribers: [],
 });
