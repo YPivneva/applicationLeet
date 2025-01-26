@@ -52,7 +52,13 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  req.session.userId = user._id;
+  if (typeof req.session.userId === 'string') {
+    const id: string = req.session.userId; 
+  } else {
+    // Обработка случая, когда userId не является строкой
+    res.status(400).send('Invalid userId');
+  }
+  // req.session.userId = user._id;
   res.status(200).json({ message: "Login successful" });
 });
 
